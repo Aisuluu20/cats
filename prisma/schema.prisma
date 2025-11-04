@@ -1,6 +1,5 @@
+generator client {\
 
-
-generator client {
   provider = "prisma-client-js"
   // output   = "../src/generated/prisma"
 }
@@ -12,36 +11,35 @@ datasource db {
 
 
 model User {
-  id        String   @id  @default(uuid())
+  id        String     @id @default(uuid())
   name      String
   email     String
   password  String
   favorites Favorite[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model Cats {
-  id           String        @id @default(uuid())
-  image        String?
-  url          String?
-  color        String
-  name         String
-  age          Int
-  price        Int
-  sale         Int           @default(0)
-  favorites    Favorite[]
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime      @updatedAt
+  id        String     @id @default(uuid())
+  image     String?
+  url       String?
+  color     String
+  name      String
+  age       Int
+  price     Int
+  sale      Int        @default(0)
+  favorites Favorite[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
 
 model Favorite {
-  id      String @id @default(uuid())
-  userId  String
-  catsId  String
-  user    User   @relation(fields: [userId], references: [id])
-  cats    Cats   @relation(fields: [catsId], references: [id])
+  id     String @id @default(uuid())
+  userId String
+  catsId String
+  user   User   @relation(fields: [userId], references: [id])
+  cats   Cats   @relation(fields: [catsId], references: [id])
 
   @@unique([userId, catsId])
 }
-
