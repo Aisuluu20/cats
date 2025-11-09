@@ -11,7 +11,7 @@ model User {
   id        String     @id @default(uuid())
   name      String
   email     String
-  password  String
+  password  Int
   favorites Favorite[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
@@ -24,7 +24,6 @@ model Cats {
   name      String
   age       Int
   price     Int
-  paws      Int
   sale      Int        @default(0)
   favorites Favorite[]
   createdAt DateTime   @default(now())

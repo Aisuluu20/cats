@@ -18,8 +18,7 @@ const getAllCat = async (req: Request, res: Response) => {
 
 const postCat = async (req: Request, res: Response) => {
   try {
-    const { name, age, color, sale, price, paws, url} =
-      req.body;
+    const { name, age, color, sale, price, url } = req.body;
 
     const oneCat = await prisma.cats.findMany();
 
@@ -49,7 +48,6 @@ const postCat = async (req: Request, res: Response) => {
         name,
         age,
         color,
-        paws,
         sale,
         price,
         url,
@@ -92,7 +90,7 @@ const patchCat = async (req: Request, res: Response) => {
       });
     }
 
-    const updatedUser = await prisma.user.update({
+    const updatedUser = await prisma.cats.update({
       where: { id },
       data: dataToUpdate,
     });
@@ -112,7 +110,7 @@ const patchCat = async (req: Request, res: Response) => {
 const updateCat = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { name, age, breed } = req.body;
+    const { name, age } = req.body;
 
     if (!id)
       return res.status(400).json({ success: false, error: "ID is required" });
@@ -120,7 +118,6 @@ const updateCat = async (req: Request, res: Response) => {
     const dataToUpdate: { name?: string; age?: number; breed?: string } = {};
     if (name !== undefined) dataToUpdate.name = name;
     if (age !== undefined) dataToUpdate.age = age;
-    if (breed !== undefined) dataToUpdate.breed = breed;
 
     if (Object.keys(dataToUpdate).length === 0) {
       return res.status(400).json({
@@ -157,13 +154,13 @@ const deleteCat = async (req: Request, res: Response) => {
       });
     }
 
-    const deletedUser = await prisma.user.delete({
+    const deletedCat = await prisma.cats.delete({
       where: { id },
     });
 
     res.status(200).json({
       success: true,
-      data: deletedUser,
+      data: deletedCat,
     });
   } catch (error) {
     res.status(500).json({

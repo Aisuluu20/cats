@@ -70,9 +70,22 @@ const login = async (req: Request, res: Response) => {
 
 const logout = async (req: Request, res: Response) => {
   try {
-    res.status(201).json({
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        success: false,
+        error: "ID is required",
+      });
+    }
+
+    const deletedUser = await prisma.user.delete({
+      where: { id },
+    });
+
+    res.status(200).json({
       success: true,
-      message: "Вы успешно вышли!!!",
+      data: deletedUser,
     });
   } catch (error) {
     res.status(500).json({
