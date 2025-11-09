@@ -16,52 +16,80 @@ const getAllCat = async (req: Request, res: Response) => {
   }
 };
 
+// const postCat = async (req: Request, res: Response) => {
+//   try {
+//     const { name, age, color, sale, price, url, paws } = req.body;
+
+//     const oneCat = await prisma.cats.findMany();
+
+//     // if (!age || !name || !color || !price || !paws || !url) {
+//     //   return res.status(400).json({
+//     //     message: "Заполните поля!",
+//     //   });
+//     // }
+
+//     // if (
+//     //   oneCat.some(
+//     //     (el) =>
+//     //       el.name === name &&
+//     //       el.color === color &&
+//     //       el.age === age &&
+//     //       el.price === price
+//     //   )
+//     // ) {
+//     //   return res.status(400).json({
+//     //     success: false,
+//     //     message: "Такой кот уже сушествует в списке",
+//     //   });
+//     // }
+
+//     const post = await prisma.cats.create({
+//       data: {
+//         name,
+//         age,
+//         color,
+//         sale,
+//         price,
+//         paws,
+//         url,
+//       },
+//     });
+
+//     res.status(200).json({
+//       success: true,
+//       data: post,
+//     });
+//   } catch (error) {
+//     res.status(500).json({
+//       success: false,
+//       error: `Error in postAllData: ${error}`,
+//     });
+//   }
+// };
 const postCat = async (req: Request, res: Response) => {
   try {
-    const { name, age, color, sale, price, url } = req.body;
-
-    const oneCat = await prisma.cats.findMany();
-
-    // if (!age || !name || !color || !price || !paws || !url) {
-    //   return res.status(400).json({
-    //     message: "Заполните поля!",
-    //   });
-    // }
-
-    // if (
-    //   oneCat.some(
-    //     (el) =>
-    //       el.name === name &&
-    //       el.color === color &&
-    //       el.age === age &&
-    //       el.price === price
-    //   )
-    // ) {
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Такой кот уже сушествует в списке",
-    //   });
-    // }
+    const { name, age, color, sale, price, url, paws } = req.body;
 
     const post = await prisma.cats.create({
       data: {
         name,
-        age,
         color,
-        sale,
-        price,
         url,
+        age: Number(age),
+        price: Number(price),
+        paws: Number(paws),
+        sale: Number(sale),
       },
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       data: post,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
-      error: `Error in postAllData: ${error}`,
+      error,
     });
   }
 };
@@ -145,7 +173,7 @@ const updateCat = async (req: Request, res: Response) => {
 
 const deleteCat = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.body;
 
     if (!id) {
       return res.status(400).json({
@@ -165,7 +193,7 @@ const deleteCat = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: `Error in deleteData: ${error}`,
+      error,
     });
   }
 };

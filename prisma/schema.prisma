@@ -24,7 +24,8 @@ model Cats {
   name      String
   age       Int
   price     Int
-  sale      Int        @default(0)
+  sale      Int        @default(5)
+  paws      Int        @default(4)
   favorites Favorite[]
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
