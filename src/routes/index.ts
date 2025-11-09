@@ -7,6 +7,7 @@ const globalRouter = Router();
 
 const corsConfig = cors({
   origin: ["http://localhost:3000", "https://cat-store-szm4.onrender.com"],
+
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
   credentials: true,
 });
