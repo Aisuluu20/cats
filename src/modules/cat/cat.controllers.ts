@@ -23,26 +23,26 @@ const postCat = async (req: Request, res: Response) => {
 
     const oneCat = await prisma.cats.findMany();
 
-    if (!age || !name || !color || !price || !paws || !url) {
-      return res.status(400).json({
-        message: "Заполните поля!",
-      });
-    }
+    // if (!age || !name || !color || !price || !paws || !url) {
+    //   return res.status(400).json({
+    //     message: "Заполните поля!",
+    //   });
+    // }
 
-    if (
-      oneCat.some(
-        (el) =>
-          el.name === name &&
-          el.color === color &&
-          el.age === age &&
-          el.price === price
-      )
-    ) {
-      return res.status(400).json({
-        success: false,
-        message: "Такой кот уже сушествует в списке",
-      });
-    }
+    // if (
+    //   oneCat.some(
+    //     (el) =>
+    //       el.name === name &&
+    //       el.color === color &&
+    //       el.age === age &&
+    //       el.price === price
+    //   )
+    // ) {
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Такой кот уже сушествует в списке",
+    //   });
+    // }
 
     const post = await prisma.cats.create({
       data: {
