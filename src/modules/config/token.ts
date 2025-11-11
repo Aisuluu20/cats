@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const generateToken = (userId: string, userEmail: string) => {
+export const generateToken = (userId: string, userEmail: string) => {
   const JWT_SECRET = process.env.JWT_SECRET!;
 
   return jwt.sign(
@@ -14,5 +14,8 @@ const generateToken = (userId: string, userEmail: string) => {
     }
   );
 };
+export const verifyToken = (token: string) => {
+  const JWT_SECRET = process.env.JWT_SECRET!;
 
-export default generateToken;
+  return jwt.verify(token, JWT_SECRET) as { id: string; name: string };
+};

@@ -52,13 +52,13 @@ const deleteData = async (req: Request, res: Response) => {
       });
     }
 
-    const deletedUser = await prisma.favorite.delete({
+    const deletefave = await prisma.favorite.delete({
       where: { id },
     });
 
     res.status(200).json({
       success: true,
-      data: deletedUser,
+      data: deletefave,
     });
   } catch (error) {
     res.status(500).json({

@@ -1,17 +1,19 @@
 import { Request, Response } from "express";
 import prisma from "../config/prisma";
 
-const getAllCat = async (req: Request, res: Response) => {
-  const user = await prisma.cats.findMany();
+export const getAllCat = async (req: Request, res: Response) => {
   try {
-    res.status(200).json({
+    const cats = await prisma.cats.findMany();
+
+    return res.status(200).json({
       success: true,
-      data: user,
+      data: cats,
     });
   } catch (error) {
-    res.status(500).json({
+    console.error("Error in getAllCat:", error);
+    return res.status(500).json({
       success: false,
-      error: `Error in getAllData: ${error}`,
+      error: `Error in getAllCat: ${error}`,
     });
   }
 };
@@ -66,7 +68,8 @@ const getAllCat = async (req: Request, res: Response) => {
 //     });
 //   }
 // };
-const postCat = async (req: Request, res: Response) => {
+
+export const postCat = async (req: Request, res: Response) => {
   try {
     const { name, age, color, sale, price, url, paws } = req.body;
 
@@ -94,64 +97,35 @@ const postCat = async (req: Request, res: Response) => {
   }
 };
 
-const patchCat = async (req: Request, res: Response) => {
+export const updateCat = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-
     if (!id) {
-      return res.status(400).json({
-        success: false,
-        error: "ID is required",
-      });
-    }
-
-    const { name, age } = req.body;
-
-    const dataToUpdate: { name?: string; age?: number } = {};
-    if (name !== undefined) dataToUpdate.name = name;
-    if (age !== undefined) dataToUpdate.age = age;
-
-    if (Object.keys(dataToUpdate).length === 0) {
-      return res.status(400).json({
-        success: false,
-        error: "No fields provided to update",
-      });
-    }
-
-    const updatedUser = await prisma.cats.update({
-      where: { id },
-      data: dataToUpdate,
-    });
-
-    res.status(200).json({
-      success: true,
-      data: updatedUser,
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: `Error in patchData: ${error}`,
-    });
-  }
-};
-
-const updateCat = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const { name, age } = req.body;
-
-    if (!id)
       return res.status(400).json({ success: false, error: "ID is required" });
+    }
 
-    const dataToUpdate: { name?: string; age?: number; breed?: string } = {};
-    if (name !== undefined) dataToUpdate.name = name;
-    if (age !== undefined) dataToUpdate.age = age;
+    const allowedFields = [
+      "name",
+      "age",
+      "breed",
+      "color",
+      "price",
+      "sale",
+      "paws",
+      "url",
+    ];
+    const dataToUpdate: Record<string, any> = {};
+
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        dataToUpdate[field] = req.body[field];
+      }
+    }
 
     if (Object.keys(dataToUpdate).length === 0) {
-      return res.status(400).json({
-        success: false,
-        error: "No fields to update",
-      });
+      return res
+        .status(400)
+        .json({ success: false, error: "No fields to update" });
     }
 
     const updatedCat = await prisma.cats.update({
@@ -159,21 +133,18 @@ const updateCat = async (req: Request, res: Response) => {
       data: dataToUpdate,
     });
 
-    res.status(200).json({
-      success: true,
-      data: updatedCat,
-    });
+    res.status(200).json({ success: true, data: updatedCat });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: `Error in updateCat: ${error}`,
-    });
+    console.error("Error in updateCat:", error);
+    res
+      .status(500)
+      .json({ success: false, error: `Error in updateCat: ${error}` });
   }
 };
 
-const deleteCat = async (req: Request, res: Response) => {
+export const deleteCat = async (req: Request, res: Response) => {
   try {
-    const { id } = req.body;
+    const { id } = req.params;
 
     if (!id) {
       return res.status(400).json({
@@ -191,17 +162,10 @@ const deleteCat = async (req: Request, res: Response) => {
       data: deletedCat,
     });
   } catch (error) {
+    console.error("Error in deleteCat:", error);
     res.status(500).json({
       success: false,
-      error,
+      error: `Error in deleteCat: ${error}`,
     });
   }
-};
-
-export default {
-  getAllCat,
-  postCat,
-  patchCat,
-  updateCat,
-  deleteCat,
 };

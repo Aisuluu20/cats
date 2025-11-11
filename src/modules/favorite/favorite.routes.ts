@@ -1,9 +1,10 @@
 import express from "express";
-import catControllers from "../favorite/favorite.controllers";
+import catController from "./favorite.controller";
 
 const router = express.Router();
 
-router.get("/fav-cats", catControllers.getAllData);
-router.get("/deletes", catControllers.deleteData);
+router.get("/fav-cats", catController.getAllData);
+router.get("/fav-one", catController.getAllOne);
+router.get("/deletes", catController.deleteData);
 
 export default router;
